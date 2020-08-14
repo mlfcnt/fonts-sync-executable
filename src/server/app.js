@@ -6,6 +6,7 @@ const logger = require("morgan");
 const apiRouter = require("./routes/api");
 
 const app = express();
+const opn = require("opn");
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -17,11 +18,11 @@ app.use("/api", apiRouter);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../client/build")));
-
+opn("http://localhost:3000");
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get("*", (req, res) => {
-  console.log("req.path", req.path);
+  console.log("req.path", req.paph);
   res.sendFile(path.join(__dirname + "../client/build/index.html"));
 });
 
