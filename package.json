@@ -8,6 +8,7 @@
     "logs": "heroku logs -t",
     "heroku-postbuild": "cd src/client && npm install && npm run build"
   },
+  "bin": "src/server/bin/www",
   "dependencies": {},
   "engines": {
     "node": ">=12.16.1",

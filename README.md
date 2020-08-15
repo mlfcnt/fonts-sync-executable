@@ -1,4 +1,14 @@
-# react-node-template
+# fonts-sync-executable
+
+Projet dont le but est de permettre la synchronisation de polices d'écritures entre plusieurs ordinateurs tournant sur Windows, Linux et macOS.
+
+##### Commandes utiles
+
+- `pkg . --out-path bin` : permet de compiler le projet en executables disponibles dans le dossier /bin
+  &nbsp;  
+  &nbsp;
+
+### react-node-template
 
 React Node Template is a simple, unopinionated, full stack web app template, with the goal of facilitating quick prototyping and deployment to [Heroku](https://www.heroku.com/) or elsewhere.
 
