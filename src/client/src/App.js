@@ -1,24 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./App.css";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Home } from "./components/pages/Home";
+import { LocalFontsTable } from "./components/pages/LocalFontsTable";
+import { OnlineFontsTable } from "./components/pages/OnlineFontsTable";
+import { ThemeProvider } from "./components/context/ThemeProvider";
+import "rsuite/dist/styles/rsuite-default.css";
 
-function App() {
-  const [fonts, setFonts] = useState();
-  useEffect(() => {
-    fetch("/api/fonts")
-      .then((res) => res.json())
-      .then((json) => setFonts(json.fonts));
-  }, []);
-
-  if (!fonts) return <p>Chargement des polices...</p>;
-
+export const App = () => {
   return (
-    <div className="App">
-      <h3>{fonts.length} polices trouvées</h3>
-      {fonts.map((f) => (
-        <p style={{ fontSize: "0.7rem" }}>{f}</p>
-      ))}
-    </div>
+    <Router>
+      <ThemeProvider>
+        <div className="App">
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/mes-polices-locales">
+              <LocalFontsTable />
+            </Route>
+            <Route path="/mes-polices-en-ligne">
+              <OnlineFontsTable />
+            </Route>
+          </Switch>
+        </div>
+      </ThemeProvider>
+    </Router>
   );
-}
+};
 
 export default App;

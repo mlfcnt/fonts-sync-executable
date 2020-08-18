@@ -5,10 +5,17 @@
   "scripts": {
     "start": "cd src/server && npm install && npm start",
     "dev": "concurrently \"cd src/server && nodemon\" \"cd src/client && npm start\"",
-    "logs": "heroku logs -t",
-    "heroku-postbuild": "cd src/client && npm install && npm run build"
+    "package": "pkg . --out-path bin && cp ./src/server/node_modules/opn/xdg-open ../bin/xdg-open"
   },
   "bin": "src/server/bin/www",
+  "pkg": {
+    "scripts": [
+      "src/client/build/**/*.js"
+    ],
+    "assets": [
+      "src/client/**/*"
+    ]
+  },
   "dependencies": {},
   "engines": {
     "node": ">=12.16.1",
