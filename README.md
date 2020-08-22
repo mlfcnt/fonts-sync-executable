@@ -7,7 +7,9 @@ Projet dont le but est de permettre la synchronisation de polices d'écritures e
 - cd fonts-sync-executable/
 - cd src/server/ && yarn &&  cd ../client && yarn
 - yarn build
-- cd ../server && yarn start
+- cd ../server && touch .env
+- replacer les infos du .env
+- yarn start
 - Ouvrir http://localhost:4000/ dans le navigateur
 
 ##### Commandes utiles
