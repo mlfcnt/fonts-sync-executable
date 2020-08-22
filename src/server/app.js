@@ -22,7 +22,7 @@ app.use("/font", apiRouter);
 app.use("/user", user);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, "../client/build")));
+// app.use(express.static(path.join(__dirname, "../client")));
 
 // requires the model with Passport-Local Mongoose plugged in
 const User = require("./models/user");
@@ -40,8 +40,7 @@ console.log("-----------------------------------");
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get("*", (req, res) => {
-  console.log("req.path", req.path);
-  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 });
 
 module.exports = app;

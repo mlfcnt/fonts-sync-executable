@@ -7,6 +7,7 @@ import { OnlineFontsTable } from "./components/pages/OnlineFontsTable";
 import { ThemeProvider } from "./components/context/ThemeProvider";
 import "rsuite/dist/styles/rsuite-default.css";
 import { UserProvider } from "./components/context/UserProvider";
+import { NotFound } from "./components/pages/NotFound";
 
 export const App = () => {
   return (
@@ -23,6 +24,9 @@ export const App = () => {
               </Route>
               <Route path="/mes-polices-en-ligne">
                 <OnlineFontsTable />
+              </Route>
+              <Route path="*">
+                <NotFound />
               </Route>
             </Switch>
           </div>
