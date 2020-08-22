@@ -8,16 +8,14 @@ import {
   Form,
 } from "rsuite";
 import { logUserIn } from "../../Api";
-import { UserContext } from "../context/UserProvider";
 
-export const LogIn = ({ close, toggleModalBody }) => {
+export const LogIn = ({ show, close }) => {
   const defaultFormValues = {
     username: "",
     password: "",
   };
   const [formValue, setFormValue] = useState(defaultFormValues);
   const [error, setError] = useState("");
-  const [loadingUser, tokenStatus, user, refetch] = useContext(UserContext);
 
   const handleChange = (value) => setFormValue(value);
   const handleSubmit = async () => {
@@ -30,50 +28,29 @@ export const LogIn = ({ close, toggleModalBody }) => {
     handleClose();
     localStorage.setItem("username", username);
     localStorage.setItem("token", token);
-    return refetch();
+    return window.location.reload(false);
   };
 
   const handleClose = () => {
     setFormValue(defaultFormValues);
     setError();
-    return close();
   };
 
   return (
-    <>
-      <Modal.Header>
-        <Modal.Title>Connexion</Modal.Title>
-        <p>
-          Pas de compte ?{" "}
-          <span
-            style={{ color: "blue", cursor: "pointer" }}
-            onClick={toggleModalBody}
-          >
-            Créer un compte
-          </span>
-        </p>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </Modal.Header>
-      <Modal.Body>
-        <Form fluid onChange={handleChange} formValue={formValue}>
-          <FormGroup>
-            <ControlLabel>Identifiant</ControlLabel>
-            <FormControl name="username" />
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>Mot de passe</ControlLabel>
-            <FormControl name="password" type="password" />
-          </FormGroup>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={handleSubmit} appearance="primary">
-          Ok
-        </Button>
-        <Button onClick={handleClose} appearance="subtle">
-          Pas ok
-        </Button>
-      </Modal.Footer>
-    </>
+    <Form onChange={handleChange} formValue={formValue}>
+      <h5>Connexion</h5>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <FormGroup>
+        <ControlLabel>Identifiant</ControlLabel>
+        <FormControl name="username" />
+      </FormGroup>
+      <FormGroup>
+        <ControlLabel>Mot de passe</ControlLabel>
+        <FormControl name="password" type="password" />
+      </FormGroup>
+      <Button onClick={handleSubmit} appearance="primary">
+        Connexion
+      </Button>
+    </Form>
   );
 };

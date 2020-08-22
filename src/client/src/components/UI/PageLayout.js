@@ -1,11 +1,12 @@
 import React from "react";
 import { Header } from "./Header";
+import { Container, Content } from "rsuite";
 
 export const PageLayout = ({ children }) => {
   return (
-    <div>
+    <Container>
       <Header />
-      <main>{children}</main>
-    </div>
+      <Content>{children}</Content>
+    </Container>
   );
 };

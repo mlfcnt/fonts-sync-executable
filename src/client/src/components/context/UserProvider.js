@@ -9,17 +9,12 @@ export function UserProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
 
-  const refetch = async () => {
-    console.log("inside refetch");
-    const { auth } = await checkAuth();
-    console.log({ auth });
-    setTokenStatus(auth);
-    setLoading(false);
-  };
-
   useEffect(() => {
-    console.log("inside useEffect");
-    refetch();
+    (async () => {
+      const { auth } = await checkAuth();
+      setTokenStatus(auth);
+      setLoading(false);
+    })();
   }, []);
 
   useEffect(() => {
@@ -31,7 +26,7 @@ export function UserProvider({ children }) {
   }, [tokenStatus]);
 
   return (
-    <UserContext.Provider value={[loading, tokenStatus, user, refetch]}>
+    <UserContext.Provider value={[loading, tokenStatus, user]}>
       {children}
     </UserContext.Provider>
   );

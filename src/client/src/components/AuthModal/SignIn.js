@@ -9,7 +9,7 @@ import {
 } from "rsuite";
 import { createUser } from "../../Api";
 
-export const SignIn = ({ close, toggleModalBody }) => {
+export const SignIn = ({ show, close }) => {
   const defaultFormValues = {
     username: "",
     email: "",
@@ -36,48 +36,27 @@ export const SignIn = ({ close, toggleModalBody }) => {
   const handleClose = () => {
     setFormValue(defaultFormValues);
     setError();
-    return close();
   };
 
   return (
-    <>
-      <Modal.Header>
-        <Modal.Title>Créer un compte</Modal.Title>
-        <p>
-          Déjà un compte ?{" "}
-          <span
-            style={{ color: "blue", cursor: "pointer" }}
-            onClick={toggleModalBody}
-          >
-            Connexion
-          </span>
-        </p>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </Modal.Header>
-      <Modal.Body>
-        <Form fluid onChange={handleChange} formValue={formValue}>
-          <FormGroup>
-            <ControlLabel>Identifiant</ControlLabel>
-            <FormControl name="username" />
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>Email</ControlLabel>
-            <FormControl name="email" type="email" />
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>Mot de passe</ControlLabel>
-            <FormControl name="password" type="password" />
-          </FormGroup>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={handleSubmit} appearance="primary">
-          Ok
-        </Button>
-        <Button onClick={handleClose} appearance="subtle">
-          Pas ok
-        </Button>
-      </Modal.Footer>
-    </>
+    <Form onChange={handleChange} formValue={formValue}>
+      <h5>Créer un compte</h5>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <FormGroup>
+        <ControlLabel>Identifiant</ControlLabel>
+        <FormControl name="username" />
+      </FormGroup>
+      <FormGroup>
+        <ControlLabel>Email</ControlLabel>
+        <FormControl name="email" type="email" />
+      </FormGroup>
+      <FormGroup>
+        <ControlLabel>Mot de passe</ControlLabel>
+        <FormControl name="password" type="password" />
+      </FormGroup>
+      <Button onClick={handleSubmit} appearance="primary">
+        Créer mon compte
+      </Button>
+    </Form>
   );
 };

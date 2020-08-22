@@ -6,7 +6,7 @@ const { uploadFile, downloadFile, listObjects } = require("../services/s3");
 const { auth } = require("../middleware/auth");
 
 /* GET local fonts. */
-router.get("/local", async function (req, res, next) {
+router.get("/local", auth, async function (req, res, next) {
   console.log("Récupération des polices...");
   fontManager.getAvailableFonts((fontsRaw) => {
     console.log(`${fontsRaw.length} polices trouvées :D`);

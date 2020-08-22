@@ -1,20 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { SignIn } from "./SignIn";
 import { LogIn } from "./Login";
-import { Modal } from "rsuite";
-import { eAuthModal } from "../../constants/authModalType";
-export const AuthModal = ({ show, close, type }) => {
-  const toggleModalBody = () => setBody(bodies.reverse()[0]);
-
-  const signIn = <SignIn close={close} toggleModalBody={toggleModalBody} />;
-  const logIn = <LogIn close={close} toggleModalBody={toggleModalBody} />;
-  const [body, setBody] = useState(signIn);
-
-  const bodies = type === eAuthModal.SIGNIN ? [signIn, logIn] : [logIn, signIn];
-
+import { Modal, Panel, FlexboxGrid } from "rsuite";
+export const AuthModal = ({ show, close }) => {
   return (
-    <Modal show={show} onHide={close} size="xs">
-      {body}
+    <Modal show={show} onHide={close} size="lg">
+      <Modal.Body>
+        <FlexboxGrid justify="space-around" align="middle">
+          <FlexboxGrid.Item>
+            <Panel bordered>
+              <LogIn />
+            </Panel>
+          </FlexboxGrid.Item>
+          <FlexboxGrid.Item>
+            <Panel bordered>
+              <SignIn />
+            </Panel>
+          </FlexboxGrid.Item>
+        </FlexboxGrid>
+      </Modal.Body>
     </Modal>
   );
 };
