@@ -4,6 +4,7 @@ const { formatFonts, getHostname } = require("../services/fontService");
 const fontManager = require("font-manager");
 const { uploadFile, downloadFile, listObjects } = require("../services/s3");
 const { auth } = require("../middleware/auth");
+const { CloudWatchLogs } = require("aws-sdk");
 
 /* GET local fonts. */
 router.get("/local", auth, async function (req, res, next) {
@@ -18,19 +19,22 @@ router.get("/local", auth, async function (req, res, next) {
 });
 
 /* upload file to S3. */
-router.get("/s3-upload", async function (req, res, next) {
+router.post("/s3-upload", async function (req, res, next) {
+  const { userId, fontNames, fontPaths } = req.body;
+  console.log(fontPaths[0], fontNames[0], userId);
   try {
-    const test = uploadFile();
+    const test = uploadFile(fontPaths[0], fontNames[0], userId);
     res.send({ ok: "ok" });
   } catch (error) {
-    console.log("error");
+    console.log(error);
   }
 });
 
 /* download file from S3. */
 router.get("/s3-download", async function (req, res, next) {
   try {
-    const test = downloadFile();
+    const test = await downloadFile();
+    res.send({ ok: "ok" });
   } catch (error) {
     console.log("error");
   }

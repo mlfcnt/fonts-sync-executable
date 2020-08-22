@@ -11,28 +11,25 @@ const s3 = new AWS.S3({
 
 const bucket = "fonts-sync";
 
-const filePath = path.join(__dirname, "./test.html");
-
-const uploadFile = () => {
-  fs.readFile(filePath, (err, data) => {
-    if (err) throw err;
-    const params = {
-      Bucket: bucket, // pass your bucket name
-      Key: "fonts/test.html", // file will be saved as testBucket/contacts.csv
-      Body: JSON.stringify(data, null, 2),
-    };
-    s3.upload(params, function (s3Err, data) {
-      if (s3Err) throw s3Err;
-      console.log(`File uploaded successfully at ${data.Location}`);
-      return "ok";
-    });
+const uploadFile = (fontPath, fontName, userId) => {
+  console.log(fontPath);
+  const fileContent = fs.readFileSync(fontPath);
+  const params = {
+    Bucket: bucket,
+    Key: `${userId}/${fontName}`, // File name you want to save as in S3
+    Body: fileContent,
+  };
+  s3.upload(params, function (s3Err, data) {
+    if (s3Err) throw s3Err;
+    console.log(`File uploaded successfully at ${data.Location}`);
+    return "ok";
   });
 };
 
 const downloadFile = () => {
   var s3Params = {
-    Bucket: bucket,
-    Key: "fonts/test.html",
+    Bucket: `${bucket}/3250573c-8d5d-497b-ae83-20a47d793ffa`,
+    Key: "DejaVuSans.ttf",
   };
   s3.getObject(s3Params, function (err, data) {
     if (err === null) {

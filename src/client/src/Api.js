@@ -37,9 +37,17 @@ export const logUserIn = ({ username, password }) => {
   }
 };
 
-export const checkAuth = async () => {
-  console.log("inside checkAuth");
-  return secured.get("user/checkAuth").json();
-};
+export const checkAuth = async () => secured.get("user/checkAuth").json();
 
 export const getUserInfo = async () => secured.get("user/me").json();
+
+export const uploadFonts = async (fontPaths, fontNames, userId) => {
+  try {
+    return ky.post("font/s3-upload", {
+      json: { fontPaths, fontNames, userId },
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+};

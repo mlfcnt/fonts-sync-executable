@@ -1,5 +1,7 @@
+import React, { useState } from "react";
 import moment from "moment";
 import { booleanFormatter } from "./helpers/booleanFormatter";
+import { CustomToolbarSelect } from "./CustomToolbarSelect";
 moment.locale("fr");
 
 export const generateData = (fonts) => {
@@ -59,43 +61,51 @@ export const columns = [
   { name: "Ajoutée le", options: { filter: false, sort: true } },
 ];
 
-export const options = {
-  filterType: "checkbox",
-  filter: true,
-  print: false,
-  download: false,
-  textLabels: {
-    body: {
-      noMatch: "Pas de polices trouvées :(",
-      toolTip: "Trier",
-      columnHeaderTooltip: (column) => {
-        if (column.name === "Extension")
-          return `Grouper par ${column.label.toLowerCase()}`;
-        return `Trier par ${column.label.toLowerCase()}`;
+export const generateOptions = (setFontsToUpload) => {
+  return {
+    filterType: "checkbox",
+    filter: true,
+    print: false,
+    download: false,
+    textLabels: {
+      body: {
+        noMatch: "Pas de polices trouvées :(",
+        toolTip: "Trier",
+        columnHeaderTooltip: (column) => {
+          if (column.name === "Extension")
+            return `Grouper par ${column.label.toLowerCase()}`;
+          return `Trier par ${column.label.toLowerCase()}`;
+        },
+      },
+      pagination: {
+        next: "Page suivante",
+        previous: "Page précédente",
+        rowsPerPage: "Polices par page:",
+        displayRows: "de",
+      },
+      toolbar: {
+        search: "Recherche",
+        viewColumns: "Voir les colonnes",
+        filterTable: "Filter le tableau",
+      },
+      filter: {
+        all: "Toutes",
+        title: "FILTRES",
+        reset: "RESET",
+      },
+      viewColumns: {
+        title: "Voir les colonnes",
+        titleAria: "Afficher/Cacher les colonnes du tableau",
+      },
+      selectedRows: {
+        text: "police(s) séléctionnée(s)",
       },
     },
-    pagination: {
-      next: "Page suivante",
-      previous: "Page précédente",
-      rowsPerPage: "Polices par page:",
-      displayRows: "de",
-    },
-    toolbar: {
-      search: "Recherche",
-      viewColumns: "Voir les colonnes",
-      filterTable: "Filter le tableau",
-    },
-    filter: {
-      all: "Toutes",
-      title: "FILTRES",
-      reset: "RESET",
-    },
-    viewColumns: {
-      title: "Voir les colonnes",
-      titleAria: "Afficher/Cacher les colonnes du tableau",
-    },
-    selectedRows: {
-      text: "police(s) séléctionnée(s)",
-    },
-  },
+    customToolbarSelect: (selectedRows) => (
+      <CustomToolbarSelect
+        selectedRows={selectedRows}
+        setFontsToUpload={setFontsToUpload}
+      />
+    ),
+  };
 };

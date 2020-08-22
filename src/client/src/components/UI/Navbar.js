@@ -51,7 +51,6 @@ export const Navbar = () => {
                 Connecté en tant que {username} -{" "}
                 <a
                   onClick={() => {
-                    console.log("deleting localStorage");
                     window.localStorage.removeItem("token");
                     window.localStorage.removeItem("username");
                     window.location.reload(false);
