@@ -3,31 +3,33 @@ import { booleanFormatter } from "./helpers/booleanFormatter";
 moment.locale("fr");
 
 export const generateData = (fonts) => {
-  return fonts.map(
-    ({
-      path,
-      postscriptName: name,
-      family,
-      style,
-      weight,
-      width,
-      italic,
-      monospace,
-      birthtime,
-      extension,
-    }) => [
-      name,
-      extension,
-      family,
-      style,
-      weight,
-      width,
-      monospace,
-      italic,
-      // path,
-      moment(birthtime).format("DD/MM/YYYY - HH:mm"),
-    ]
-  );
+  return fonts
+    .sort((a, b) => a.postscriptName.localeCompare(b.postscriptName))
+    .map(
+      ({
+        path,
+        postscriptName: name,
+        family,
+        style,
+        weight,
+        width,
+        italic,
+        monospace,
+        birthtime,
+        extension,
+      }) => [
+        name,
+        extension,
+        family,
+        style,
+        weight,
+        width,
+        monospace,
+        italic,
+        // path,
+        moment(birthtime).format("DD/MM/YYYY - HH:mm"),
+      ]
+    );
 };
 
 export const columns = [
