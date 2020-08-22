@@ -8,7 +8,6 @@ import { PageLayout } from "../UI/PageLayout";
 export const LocalFontsTable = () => {
   const [fonts, setFonts] = useState();
   const [hostname, setHostname] = useState();
-  console.log({ fonts });
 
   useEffect(() => {
     (async () => {

@@ -5,7 +5,7 @@ const logger = require("morgan");
 const apiRouter = require("./routes/font");
 const app = express();
 const { startClient, startServer } = require("./services/processService");
-const open = require("open");
+// const open = require("open");
 const { connectToDb } = require("./db");
 const user = require("./routes/user"); //new addition
 
@@ -33,7 +33,7 @@ console.log("-----------------------------------");
 // startClient();
 console.log("Client lancé sur le port 3000");
 console.log("-----------------------------------");
-open("http://localhost:4000");
+// open("http://localhost:4000");
 console.log("Ouverture du navigateur par défaut");
 console.log("-----------------------------------");
 

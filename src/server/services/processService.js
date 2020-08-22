@@ -15,7 +15,7 @@ const startProcess = (cmd, dir) => {
 };
 
 const startServer = () => {
-  startProcess("yarn start", "server");
+  startProcess(". .env && yarn start", "server");
 };
 const startClient = () => {
   startProcess("yarn start", "client");

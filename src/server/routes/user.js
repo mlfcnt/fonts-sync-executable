@@ -1,11 +1,12 @@
 const express = require("express");
-const { check, validationResult } = require("express-validator/check");
+const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-const auth = require("../middleware/auth");
+const { auth } = require("../middleware/auth");
 
 const User = require("../models/user");
+const { checkAuth } = require("../middleware/auth");
 
 router.post(
   "/signup",
@@ -14,15 +15,19 @@ router.post(
       .not()
       .isEmpty(),
     check("email", "Veuillez entrer un email valide").isEmail(),
-    check("password", "Veuillez entrer un mot de passe valide").isLength({
+    check(
+      "password",
+      "Veuillez entrer un mot de passe valide (6 char)"
+    ).isLength({
       min: 6,
     }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
+      return res.status(200).json({
+        success: false,
+        errorMessage: errors.array()[0].msg,
       });
     }
 
@@ -32,8 +37,9 @@ router.post(
         email,
       });
       if (user) {
-        return res.status(400).json({
-          msg: "Cet utilisateur existe déjà",
+        return res.status(200).json({
+          success: false,
+          errorMessage: "Cet email est déjà utilisé",
         });
       }
 
@@ -63,6 +69,7 @@ router.post(
         (err, token) => {
           if (err) throw err;
           res.status(200).json({
+            success: true,
             token,
           });
         }
@@ -77,8 +84,13 @@ router.post(
 router.post(
   "/login",
   [
-    check("email", "Veuillez entrer un email valide").isEmail(),
-    check("password", "Veuillez entrer un mot de passe valide").isLength({
+    check("username", "Veuillez entrer un nom d'utilisateur valide")
+      .not()
+      .isEmpty(),
+    check(
+      "password",
+      "Veuillez entrer un mot de passe valide (6 char)"
+    ).isLength({
       min: 6,
     }),
   ],
@@ -86,25 +98,28 @@ router.post(
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
+      return res.status(200).json({
+        success: false,
+        errorMessage: errors.array()[0].msg,
       });
     }
 
-    const { email, password } = req.body;
+    const { username, password } = req.body;
     try {
       let user = await User.findOne({
-        email,
+        username,
       });
       if (!user)
-        return res.status(400).json({
-          message: "Cet utilisateur n'existe pas",
+        return res.status(200).json({
+          success: false,
+          errorMessage: "Cet utilisateur n'existe pas",
         });
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch)
-        return res.status(400).json({
-          message: "Mot de passe incorrect",
+        return res.status(200).json({
+          success: false,
+          errorMessage: "Mot de passe incorrect",
         });
 
       const payload = {
@@ -122,6 +137,7 @@ router.post(
         (err, token) => {
           if (err) throw err;
           res.status(200).json({
+            success: true,
             token,
           });
         }
@@ -142,6 +158,18 @@ router.get("/me", auth, async (req, res) => {
     res.json(user);
   } catch (e) {
     res.send({ message: "Error in Fetching user" });
+  }
+});
+
+router.get("/checkAuth", async (req, res) => {
+  try {
+    const auth = checkAuth(req);
+    return res.status(200).json({ auth });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({
+      message: "Server Error",
+    });
   }
 });
 

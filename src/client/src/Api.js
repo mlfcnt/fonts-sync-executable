@@ -1,15 +1,45 @@
 import ky from "ky";
 
-export const getFonts = async () =>
-  fetch("/font/local").then((res) => res.json());
+const token = localStorage.getItem("token");
 
-export const createUser = async ({ username, email, password, setError }) => {
+const secured = ky.extend({
+  hooks: {
+    beforeRequest: [
+      (request) => {
+        request.headers.set("x-access-token", token);
+      },
+    ],
+  },
+});
+
+export const getFonts = async () => secured.get("/font/local").json();
+
+export const createUser = ({ username, email, password }) => {
   try {
-    const token = await ky.post("user/signup", {
-      json: { username, email, password },
-    });
-    return localStorage.setItem({ token });
+    return ky
+      .post("user/signup", {
+        json: { username, email, password },
+      })
+      .json();
   } catch (error) {
-    setError(error);
+    throw new Error(error.message);
   }
 };
+export const logUserIn = ({ username, password }) => {
+  try {
+    return ky
+      .post("user/login", {
+        json: { username, password },
+      })
+      .json();
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const checkAuth = async () => {
+  console.log("inside checkAuth");
+  return secured.get("user/checkAuth").json();
+};
+
+export const getUserInfo = async () => secured.get("user/me").json();

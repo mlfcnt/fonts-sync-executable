@@ -1,24 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Navbar as rsNav, Nav, Icon, Button } from "rsuite";
-import { SignInModal } from "../SignInModal";
+import { AuthModal } from "../AuthModal/AuthModal";
+import { UserContext } from "../context/UserProvider";
+import { eTokenStatus } from "../../constants/tokenStatus";
+import { eAuthModal } from "../../constants/authModalType";
 
 export const Navbar = () => {
   const [active, setActive] = useState("home");
   const [showUserModal, setShowUserModal] = useState(false);
   // const [theme, toggleTheme] = useContext(ThemeContext);
+  const [loadingUser, tokenStatus, user] = useContext(UserContext);
+  const username = user?.username || "";
 
-  console.log({ showUserModal });
   const styles = {
     marginBottom: 50,
   };
-  // const displayThemeIcon = () =>
-  //   theme === "light" ? (
-  //     <Icon icon="moon-o" size="lg" />
-  //   ) : (
-  //     <Icon icon="sun-o" size="lg" />
-  //   );
 
+  const authToDisplay = () => {
+    if (loadingUser) return;
+    return tokenStatus === eTokenStatus.EXPIRED
+      ? eAuthModal.LOGIN
+      : eAuthModal.SIGNIN;
+  };
   return (
     <>
       <rsNav>
@@ -40,13 +44,28 @@ export const Navbar = () => {
             <Link eventKey="download" to="/mes-polices-en-ligne">
               <Nav.Item icon={<Icon icon="download2" />}>Télécharger</Nav.Item>
             </Link>
-            <Button onClick={() => setShowUserModal(true)}>
-              Créer un compte
-            </Button>
+            {!loadingUser && tokenStatus === eTokenStatus.NOTOKEN && (
+              <Nav.Item onClick={() => setShowUserModal(true)}>
+                Créer un compte
+              </Nav.Item>
+            )}
+            {!loadingUser && tokenStatus === eTokenStatus.EXPIRED && (
+              <Nav.Item onClick={() => setShowUserModal(true)}>
+                Se connecter
+              </Nav.Item>
+            )}
+            {!loadingUser && tokenStatus === eTokenStatus.OK && (
+              <Nav.Item>Connecté ({username})</Nav.Item>
+            )}
           </Nav>
         </rsNav.Body>
       </rsNav>
-      <SignInModal show={showUserModal} close={() => setShowUserModal(false)} />
+
+      <AuthModal
+        show={showUserModal}
+        close={() => setShowUserModal(false)}
+        type={authToDisplay}
+      />
     </>
   );
 };

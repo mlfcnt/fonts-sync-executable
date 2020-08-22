@@ -3,7 +3,7 @@ const router = express.Router();
 const { formatFonts, getHostname } = require("../services/fontService");
 const fontManager = require("font-manager");
 const { uploadFile, downloadFile, listObjects } = require("../services/s3");
-const auth = require("../middleware/auth");
+const { auth } = require("../middleware/auth");
 
 /* GET local fonts. */
 router.get("/local", async function (req, res, next) {
@@ -21,7 +21,6 @@ router.get("/local", async function (req, res, next) {
 router.get("/s3-upload", async function (req, res, next) {
   try {
     const test = uploadFile();
-    console.log({ test });
     res.send({ ok: "ok" });
   } catch (error) {
     console.log("error");

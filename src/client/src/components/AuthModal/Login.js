@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Modal,
   Button,
@@ -7,39 +7,51 @@ import {
   FormControl,
   Form,
 } from "rsuite";
-import { createUser } from "../Api";
+import { logUserIn } from "../../Api";
+import { UserContext } from "../context/UserProvider";
 
-export const SignInModal = ({ show, close }) => {
-  const [formValue, setFormValue] = useState({
+export const LogIn = ({ close, toggleModalBody }) => {
+  const defaultFormValues = {
     username: "",
-    email: "",
     password: "",
-  });
+  };
+  const [formValue, setFormValue] = useState(defaultFormValues);
   const [error, setError] = useState("");
+  const [loadingUser, tokenStatus, user, refetch] = useContext(UserContext);
 
   const handleChange = (value) => setFormValue(value);
   const handleSubmit = async () => {
-    const { username, email, password } = formValue;
-    if (!username || !email | !password) {
+    const { username, password } = formValue;
+    if (!username || !password)
       return setError("Tous les champs doivent être rempli");
-    }
-    await createUser(formValue, setError);
+
+    const { token, success, errorMessage } = await logUserIn(formValue);
+    if (!success) return setError(errorMessage);
+    handleClose();
+    localStorage.setItem("username", username);
+    localStorage.setItem("token", token);
+    return refetch();
   };
 
   const handleClose = () => {
-    setFormValue({
-      username: "",
-      email: "",
-      password: "",
-    });
+    setFormValue(defaultFormValues);
     setError();
     return close();
   };
 
   return (
-    <Modal show={show} onHide={handleClose} size="xs">
+    <>
       <Modal.Header>
-        <Modal.Title>Nouvel utilisateur</Modal.Title>
+        <Modal.Title>Connexion</Modal.Title>
+        <p>
+          Pas de compte ?{" "}
+          <span
+            style={{ color: "blue", cursor: "pointer" }}
+            onClick={toggleModalBody}
+          >
+            Créer un compte
+          </span>
+        </p>
         {error && <p style={{ color: "red" }}>{error}</p>}
       </Modal.Header>
       <Modal.Body>
@@ -47,10 +59,6 @@ export const SignInModal = ({ show, close }) => {
           <FormGroup>
             <ControlLabel>Identifiant</ControlLabel>
             <FormControl name="username" />
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>Email</ControlLabel>
-            <FormControl name="email" type="email" />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Mot de passe</ControlLabel>
@@ -66,6 +74,6 @@ export const SignInModal = ({ show, close }) => {
           Pas ok
         </Button>
       </Modal.Footer>
-    </Modal>
+    </>
   );
 };
