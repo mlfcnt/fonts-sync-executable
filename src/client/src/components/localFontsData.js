@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import { booleanFormatter } from "./helpers/booleanFormatter";
-import { CustomToolbarSelect } from "./CustomToolbarSelect";
+import { LocalFontsToolbar } from "./LocalFontsToolbar";
 moment.locale("fr");
 
 export const generateData = (fonts) => {
@@ -102,7 +102,7 @@ export const generateOptions = (setFontsToUpload) => {
       },
     },
     customToolbarSelect: (selectedRows) => (
-      <CustomToolbarSelect
+      <LocalFontsToolbar
         selectedRows={selectedRows}
         setFontsToUpload={setFontsToUpload}
       />

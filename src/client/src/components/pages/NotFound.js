@@ -5,7 +5,7 @@ import travGif from "./travolta.gif";
 export const NotFound = () => {
   return (
     <PageLayout>
-      <h2>Oops... cette page n'éxiste pas...</h2>
+      <h2>Oops... cette page n'existe pas...</h2>
       <img src={travGif} alt="where is it" />
     </PageLayout>
   );

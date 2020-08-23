@@ -2,9 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { formatFonts, getHostname } = require("../services/fontService");
 const fontManager = require("font-manager");
-const { uploadFile, downloadFile, listObjects } = require("../services/s3");
+const { uploadFiles, listFonts, downloadFiles } = require("../services/s3");
 const { auth } = require("../middleware/auth");
-const { CloudWatchLogs } = require("aws-sdk");
 
 /* GET local fonts. */
 router.get("/local", auth, async function (req, res, next) {
@@ -21,30 +20,37 @@ router.get("/local", auth, async function (req, res, next) {
 /* upload file to S3. */
 router.post("/s3-upload", async function (req, res, next) {
   const { userId, fontNames, fontPaths } = req.body;
-  console.log(fontPaths[0], fontNames[0], userId);
   try {
-    const test = uploadFile(fontPaths[0], fontNames[0], userId);
-    res.send({ ok: "ok" });
+    const success = uploadFiles(fontPaths, fontNames, userId);
+    let errorMessage;
+    if (success === false)
+      errorMessage = "Erreur lors du téléversement des polices";
+    res.send({ success, errorMessage });
   } catch (error) {
     console.log(error);
   }
 });
 
 /* download file from S3. */
-router.get("/s3-download", async function (req, res, next) {
+router.post("/s3-download", function (req, res, next) {
+  console.log("inside route");
+  const { userId, fontsNamesAndExtensions } = req.body;
   try {
-    const test = await downloadFile();
-    res.send({ ok: "ok" });
+    const { success, url } = downloadFiles(userId, fontsNamesAndExtensions);
+    res.send({
+      success: true,
+      url: `${__dirname}/${url}`,
+    });
   } catch (error) {
-    console.log("error");
+    console.log("sdmfsdkmlsdkmlsdkfmsdlfk", error);
   }
 });
 
 /* list objects from S3. */
-router.get("/s3-list", async function (req, res, next) {
+router.post("/s3-list", async function (req, res, next) {
   try {
-    const keys = await listObjects();
-    res.send({ keys });
+    const keys = await listFonts(req.body.userId);
+    res.send({ success: true, keys });
   } catch (error) {
     console.log("error", error);
   }

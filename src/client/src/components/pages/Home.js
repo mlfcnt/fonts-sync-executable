@@ -18,9 +18,7 @@ export const Home = () => {
     <PageLayout>
       <FlexboxGrid justify="center">
         <FlexboxGrid.Item colspan={12}>
-          <h3 style={{ marginBottom: "1.5rem" }}>
-            fonts-sync - fonctionnalités
-          </h3>
+          <h3 style={{ marginBottom: "1.5rem" }}>fonts-sync</h3>
           <Panel>
             <Divider>Téléverser</Divider>
             <p>

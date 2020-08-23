@@ -1,6 +1,7 @@
 const fs = require("fs");
 const AWS = require("aws-sdk");
-const path = require("path");
+const join = require("path").join;
+const s3Zip = require("s3-zip");
 require("dotenv").config();
 
 const s3 = new AWS.S3({
@@ -12,56 +13,61 @@ const s3 = new AWS.S3({
 const bucket = "fonts-sync";
 
 const uploadFile = (fontPath, fontName, userId) => {
-  console.log(fontPath);
   const fileContent = fs.readFileSync(fontPath);
   const params = {
     Bucket: bucket,
     Key: `${userId}/${fontName}`, // File name you want to save as in S3
     Body: fileContent,
   };
-  s3.upload(params, function (s3Err, data) {
-    if (s3Err) throw s3Err;
-    console.log(`File uploaded successfully at ${data.Location}`);
-    return "ok";
-  });
+  const results = s3.upload(params, function (s3Err, data) {});
+  return !results.failed;
 };
 
-const downloadFile = () => {
-  var s3Params = {
-    Bucket: `${bucket}/3250573c-8d5d-497b-ae83-20a47d793ffa`,
-    Key: "DejaVuSans.ttf",
+const uploadFiles = (fontPaths, fontNames, userId) => {
+  let results = [];
+  for (let i = 0; i < fontPaths.length; i++) {
+    const res = uploadFile(fontPaths[i], fontNames[i], userId);
+    results.push(res);
+  }
+  return results;
+};
+
+const downloadFiles = (userId, fontsNamesAndExtensions) => {
+  console.log("__dirname", __dirname);
+  const output = fs.createWriteStream(join(__dirname, `font-pack.zip`));
+
+  s3Zip.archive({ s3, bucket }, userId, fontsNamesAndExtensions).pipe(output);
+  return {
+    success: true,
+    url: `font-pack-${userId}.zip`,
   };
-  s3.getObject(s3Params, function (err, data) {
-    if (err === null) {
-      // fs.writeFileSync("./downloaded.js", data.Body.toString());
-      var url = s3.getSignedUrl("getObject", s3Params);
-      console.log({ url });
-    } else {
-      console.log({ err });
-    }
-  });
 };
 
-const listObjects = async () => {
+const deleteFontsZip = (timeout = 1) => {
+  setTimeout(() => {
+    fs.unlink(`./font-pack.zip`, (err) => {
+      console.log("suppression du zip...");
+      if (err) {
+        console.error(err);
+        return;
+      }
+    });
+  }, timeout * 60 * 1000);
+};
+
+const listFonts = async (userId) => {
   var params = {
     Bucket: bucket,
     MaxKeys: 1000,
     Delimiter: "/",
-    Prefix: "fonts/",
+    Prefix: `${userId}/`,
   };
   const objects = await s3.listObjectsV2(params).promise();
-  const keys = objects.Contents.map((c) => c.Key);
-  keys.shift();
-  return keys;
-  // await s3.listObjectsV2(params, function (err, data) {
-  //   console.log("couocu", data.Contents.map((c) => c.Key).shift());
-  //   if (err) console.log(err, err.stack);
-  //   else return "ok";
-  // });
+  return objects.Contents.map((c) => c.Key);
 };
 
 module.exports = {
-  uploadFile,
-  downloadFile,
-  listObjects,
+  uploadFiles,
+  downloadFiles,
+  listFonts,
 };

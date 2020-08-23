@@ -29,7 +29,8 @@ export const SignIn = ({ show, close }) => {
     return (
       handleClose(),
       localStorage.setItem("username", username),
-      localStorage.setItem("token", token)
+      localStorage.setItem("token", token),
+      window.location.reload(false)
     );
   };
 
