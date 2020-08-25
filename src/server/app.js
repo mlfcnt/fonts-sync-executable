@@ -7,7 +7,7 @@ const app = express();
 const { startClient, startServer } = require("./services/processService");
 // const open = require("open");
 const { connectToDb } = require("./db");
-const user = require("./routes/user"); //new addition
+const user = require("./routes/user");
 
 // Connexion a la BDD
 connectToDb();
@@ -23,9 +23,6 @@ app.use("/user", user);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../client/build")));
-
-// requires the model with Passport-Local Mongoose plugged in
-const User = require("./models/user");
 
 // startServer();
 console.log("Server lancé sur le port 4000");

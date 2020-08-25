@@ -33,13 +33,11 @@ const uploadFiles = (fontPaths, fontNames, userId) => {
 };
 
 const downloadFiles = (userId, fontsNamesAndExtensions) => {
-  console.log("__dirname", __dirname);
   const output = fs.createWriteStream(join(__dirname, `font-pack.zip`));
 
   s3Zip.archive({ s3, bucket }, userId, fontsNamesAndExtensions).pipe(output);
   return {
     success: true,
-    url: `font-pack-${userId}.zip`,
   };
 };
 

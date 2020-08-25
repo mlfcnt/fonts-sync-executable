@@ -43,6 +43,7 @@ export const OnlineFontsTable = () => {
         user._id,
         fontsNamesAndExtensions
       );
+      console.log({ url });
       window.open(url);
     })();
   }, [fontsToDownload]);

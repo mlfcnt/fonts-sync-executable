@@ -33,13 +33,12 @@ router.post("/s3-upload", async function (req, res, next) {
 
 /* download file from S3. */
 router.post("/s3-download", function (req, res, next) {
-  console.log("inside route");
   const { userId, fontsNamesAndExtensions } = req.body;
   try {
-    const { success, url } = downloadFiles(userId, fontsNamesAndExtensions);
+    const { success } = downloadFiles(userId, fontsNamesAndExtensions);
     res.send({
       success: true,
-      url: `${__dirname}/${url}`,
+      url: `${__dirname}/font-pack.zip`,
     });
   } catch (error) {
     console.log("sdmfsdkmlsdkmlsdkfmsdlfk", error);
