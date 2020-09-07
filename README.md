@@ -3,14 +3,19 @@
 Projet dont le but est de permettre la synchronisation de polices d'écritures entre plusieurs ordinateurs tournant sur Windows, Linux et macOS.
 
 #### Lancer le projet en dev
+
 - git clone git@github.com:mlfcnt/fonts-sync-executable.git
 - cd fonts-sync-executable/
-- cd src/server/ && yarn &&  cd ../client && yarn
+- cd src/server/ && yarn && cd ../client && yarn
 - yarn build
 - cd ../server && touch .env
 - replacer les infos du .env
 - yarn start
 - Ouvrir http://localhost:4000/ dans le navigateur
+
+#### Fix pour windows
+
+Dans un powershell en admin, lancer npm install --global windows-build-tools
 
 ##### Commandes utiles
 
