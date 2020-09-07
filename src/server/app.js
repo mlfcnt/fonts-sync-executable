@@ -1,13 +1,14 @@
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const logger = require("morgan");
 const apiRouter = require("./routes/font");
 const app = express();
 const { startClient, startServer } = require("./services/processService");
-// const open = require("open");
+const open = require("open");
 const { connectToDb } = require("./db");
 const user = require("./routes/user");
+
+console.log("Lancement...");
 
 // Connexion a la BDD
 connectToDb();
@@ -24,13 +25,13 @@ app.use("/user", user);
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../client/build")));
 
-// startServer();
+startServer();
 console.log("Server lancé sur le port 4000");
 console.log("-----------------------------------");
-// startClient();
+startClient();
 console.log("Client lancé sur le port 3000");
 console.log("-----------------------------------");
-// open("http://localhost:4000");
+open("http://localhost:4000");
 console.log("Ouverture du navigateur par défaut");
 console.log("-----------------------------------");
 

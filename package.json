@@ -5,7 +5,7 @@
   "scripts": {
     "start": "cd src/server && npm install && npm start",
     "dev": "concurrently \"cd src/server && nodemon\" \"cd src/client && npm start\"",
-    "package": "nexe -i src/server/app.js -t node12-win-x64 -p /bin/nexe -t node12-linux-x64, node12-macos-x64, node12-win-x64 -n fonts-sync-nexe"
+    "package": "pkg . --out-path bin && cp ./src/server/node_modules/open/xdg-open ./bin/xdg-open && cp ./src/server/node_modules/font-manager/build/Release/fontmanager.node ./bin/fontmanager.node"
   },
   "bin": "src/server/bin/www",
   "pkg": {
