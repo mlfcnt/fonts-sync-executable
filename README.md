@@ -17,6 +17,10 @@ Projet dont le but est de permettre la synchronisation de polices d'écritures e
 
 Dans un powershell en admin, lancer npm install --global windows-build-tools
 
+#### Fix pour mac
+
+???
+
 ##### Commandes utiles
 
 - `pkg . --out-path bin` : permet de compiler le projet en executables disponibles dans le dossier /bin
