@@ -17,7 +17,7 @@
     "flash": "^1.1.0",
     "font-manager": "^0.3.1",
     "get-system-fonts": "^2.0.2",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.10.0",
     "morgan": "~1.9.1",
     "open": "^7.1.0",
