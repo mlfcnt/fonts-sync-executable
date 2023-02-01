@@ -18,7 +18,7 @@
     "font-manager": "^0.3.1",
     "get-system-fonts": "^2.0.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^5.10.0",
+    "mongoose": "^5.13.15",
     "morgan": "~1.9.1",
     "open": "^7.1.0",
     "s3-zip": "^3.1.3",
